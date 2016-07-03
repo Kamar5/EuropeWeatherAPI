@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = null;
+}
+
+<html ng-app="myWeatherApp">
+
+<head>
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/mini-spa/style")
+    @Scripts.Render("~/bundles/mini-spa/script")
+</head>
+<body ng-controller="HomeController">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="Search by City Name" ng-model="searchCityName.cityName">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success" ng-click="updateWeatherTable()">Update Weather Table</button>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <a href="#" ng-click="sortType = 'cityName'; sortReverse = !sortReverse">
+                            City
+                            <span ng-show="sortType == 'cityName' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'cityName' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a href="#" ng-click="sortType = 'country'; sortReverse = !sortReverse">
+                            Country
+                            <span ng-show="sortType == 'country' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'country' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'temp'; sortReverse = !sortReverse">
+                            Temperature
+                            <span ng-show="sortType == 'temp' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'temp' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'temp_max'; sortReverse = !sortReverse">
+                            Max Temperature
+                            <span ng-show="sortType == 'temp_max' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'temp_max' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'temp_min'; sortReverse = !sortReverse">
+                            Min Temperature
+                            <span ng-show="sortType == 'temp_min' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'temp_min' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'pressure'; sortReverse = !sortReverse">
+                            Pressure
+                            <span ng-show="sortType == 'pressure' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'pressure' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'humidity'; sortReverse = !sortReverse">
+                            Humidity
+                            <span ng-show="sortType == 'humidity' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'humidity' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'sunrise'; sortReverse = !sortReverse">
+                            Sun Rise
+                            <span ng-show="sortType == 'sunrise' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'sunrise' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'sunset'; sortReverse = !sortReverse">
+                            Sun Set
+                            <span ng-show="sortType == 'sunset' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'sunset' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'date_Time'; sortReverse = !sortReverse">
+                            Date&Time
+                            <span ng-show="sortType == 'date_Time' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'date_Time' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'longitude'; sortReverse = !sortReverse">
+                            Longitude
+                            <span ng-show="sortType == 'longitude' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'longitude' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'latitude'; sortReverse = !sortReverse">
+                            Latitude
+                            <span ng-show="sortType == 'latitude' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'latitude' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#" ng-click="sortType = 'clouds'; sortReverse = !sortReverse">
+                            Clouds
+                            <span ng-show="sortType == 'clouds' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'clouds' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="weather in weathers | orderBy:sortType:sortReverse | filter:searchCityName">
+                    <td>{{weather.cityName}}</td>
+                    <td>{{weather.country}}</td>
+                    <td>{{weather.temp}}</td>
+                    <td>{{weather.temp_max}}</td>
+                    <td>{{weather.temp_min}}</td>
+                    <td>{{weather.pressure}} </td>
+                    <td>{{weather.humidity}} </td>
+                    <td>{{weather.sunrise * 1000 | date:'HH:mm'}}</td>
+                    <td>{{weather.sunset * 1000 | date: 'HH:mm'}}</td>
+                    <td>{{weather.date_Time * 1000 | date:'yyyy-MM-dd HH:mm'}} </td>
+                    <td>{{weather.longitude}} </td>
+                    <td>{{weather.latitude}} </td>
+                    <td>{{weather.clouds}} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿.container{
+    margin: 3%;
+}
+.row{
+    margin-bottom: 10px;
+}
+tr, th {
+    text-align: center;
+}
